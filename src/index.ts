@@ -229,3 +229,243 @@ do {
 } while (tarea1.estado !== Estados.Completado);
 
 
+// Funciones
+
+/**
+ * Funcion que muestra un saludo por consola
+ */
+function saludar() {
+    let nombre = "Kelvin";
+    console.log(`Hola! ${nombre}`);
+}
+
+// Invocacion de la funcion
+saludar();
+
+
+/**
+ * Funcion que muestra un saludo por consola
+ * @param nombre Nombre de la persona a saludar
+ */
+function saludarPersona(nombre: string) {
+    console.log(`Hola! ${nombre}`);
+}
+
+
+saludarPersona("Miguel");
+
+
+/**
+ * Funcion que muestra un adios por consola a una persona
+ * @param nombre Nombre de la persona a saludar, por defecto sera "Pepe"
+ */
+
+function despedirPersona(nombre: string = "Pepe") {
+    console.log(`Adios, ${nombre}`);
+}
+
+despedirPersona() // Adios, Pepe
+despedirPersona("Alba") // Adios, Alba
+
+/**
+ * Funcion que muestra un adios por consola a una persona
+ * @param nombre (Opcional) Nombre de la persona a despedir
+ */
+
+function despedirOpcional(nombre?: string) {
+    if (nombre) {
+        console.log(`Adios, ${nombre}`);
+    } else {
+        console.log("Adios");
+    }
+}
+
+despedirOpcional();
+despedirOpcional("Juanjo");
+
+function variosParams(nombre: string, apellidos?: string, edad: number = 18) {
+    if (apellidos) {
+        console.log(`${nombre} ${apellidos} tiene ${edad} anyos`);
+    } else {
+        console.log(`${nombre} tiene ${edad} anyos`);
+    }
+}
+
+variosParams("Martin"); //Martin tiene 18 anyos
+variosParams("Martin","San Jose"); // Martin san jose tiene 18 anyos
+variosParams("Martin", undefined, 30); // Martin tiene 30 anyos
+variosParams("Martin","San Jose", 30) // Maritn san jose tiene 30 anyos
+// variosParams(nombre="Martin", apellidos="San Jose", edad=30);
+
+function ejemploVariosTipos(a: string | number) {
+
+    if (typeof(a) === 'string') {
+        console.log(`A es un string`);
+    } else if (typeof(a) === 'number'){
+        console.log("A es un number");
+    } else {
+        console.log("A no es un string ni tampoco un number");
+        throw Error("A no es string ni un number");
+    }
+}
+
+ejemploVariosTipos("hola");
+ejemploVariosTipos(3);
+
+/**
+ * 
+ * @param nombre Nombre de la persona
+ * @param apellidos Apellidos de la persona
+ * @returns Nombre completo de la persona
+ */
+
+function ejemploReturn(nombre: string, apellidos: string): string {
+    return `${nombre} ${apellidos}`;
+}
+
+const nombreCompleto = ejemploReturn("Kelvin Miguel", "Guerrero Mite");
+
+console.log(nombreCompleto); // Kelvin Miguel Guerrero Mite
+console.log(ejemploReturn("Kelvin Miguel", "Guerrero Mite")); // Kelvin Miguel Guerrero Mite
+
+/**
+ * 
+ * @param nombres es una lista  de string
+ */
+function ejemploMultiParam(...nombres: string[]): void {
+    
+    nombres.forEach((nombre) => {
+        console.log(nombre);
+    })
+}
+
+ejemploMultiParam("Martin");
+ejemploMultiParam("Martin","Pepe", "Juan", "Alba");
+
+const lista = ["Alberto","Sandra"];
+ejemploMultiParam(...lista);
+
+function ejemploParamLista(nombres: string[]): void {
+    
+    nombres.forEach((nombre) => {
+        console.log(nombre);
+    })
+}
+
+ejemploParamLista(lista);
+
+
+// ** ARROW Functions
+
+type Empleado = {
+    nombre: string
+    apellidos: string
+    edad: number
+}
+
+let empleadoKelvin: Empleado = {
+    nombre: "Kelvin",
+    apellidos: "San Jose",
+    edad: 23
+}
+
+const mostrarEmpleado = (empleado: Empleado): string => `${empleado.nombre} tiene ${empleado.edad} anyos`;
+
+// Llamamos a la funcion
+mostrarEmpleado(empleadoKelvin);
+
+const datosEmpleado = (empleado: Empleado): string => {
+    if (empleado.edad > 70) {
+        return `Empleado ${empleado.nombre} esta en edad de jubilacion`;
+    } else {
+        return `Empleado ${empleado.nombre} esta en edad laboral`;
+    }
+}
+
+datosEmpleado(empleadoKelvin); // Empleado Kelvin esta en edad laboral
+
+
+const obtenerSalario = (empleado: Empleado, cobrar: () => string) => {
+    if (empleado.edad > 70) {
+        return `Empleado ${empleado.nombre} esta en edad de jubilacion`;
+    } else {
+        cobrar() //callback a ejecutar
+    }
+}
+
+const cobrarEmpleado = (empleado: Empleado) => {
+    console.log(`${empleado.nombre} cobra su salario`);
+}
+
+obtenerSalario(empleadoKelvin, () => 'Cobrar Kelvin');
+
+// Async Functions
+
+async function ejemploAsync(): Promise<string> {
+
+    // Await
+    await console.log("Tarea a completar antes de seguir con la secuencia de instrucciones.");
+    console.log("Tarea completada");
+    return "Completado";
+}
+
+ejemploAsync().then((respuesta) => {
+    console.log("Respuesta", respuesta);
+}).catch((error) => {
+    console.log("Ha habido un error: ",error);
+}).finally(() => "Todo ha terminado");
+
+// Generators
+
+function * ejemploGenerator() {
+    
+    // yield --> para emitir valores
+
+    let index = 0;
+
+    while (index < 5) {
+        // Emitimos un valor incrementado
+        yield index++;
+    }
+
+}
+
+// Guardamos la funcion generadora en una variable
+
+let generadora = ejemploGenerator();
+
+// Accedemos a los valores emitidos
+
+console.log(generadora.next().value); // 0
+console.log(generadora.next().value); // 1
+console.log(generadora.next().value); // 2
+console.log(generadora.next().value); // 3
+console.log(generadora.next().value); // 4
+
+// Worker
+
+function* watcher(valor: number)  {
+
+    yield valor; // emitimos el valor inicial
+    yield* worker(valor); // Llamamos a las emisiones del worker para que emita otros valores
+    yield valor + 4 // emitimos el valor final + 10
+
+}
+
+function* worker(valor: number) {
+    yield valor + 1;
+    yield valor + 2;
+    yield valor + 3;
+}
+
+let generatorSaga = watcher(0);
+
+console.log(generatorSaga.next().value); // 0 (lo ha hecho el watcher)
+console.log(generatorSaga.next().value); // 1 (lo ha hecho el worker)
+console.log(generatorSaga.next().value); // 2 (lo ha hecho el worker)
+console.log(generatorSaga.next().value); // 3 (lo ha hecho el worker)
+console.log(generatorSaga.next().value); // 4 (lo ha hecho el watcher)
+
+
+
+
