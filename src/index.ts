@@ -2,6 +2,9 @@
 //esto es un comentario en TS
 
 import { deleteAllCookies, deleteCookie, getCookieValue, setCookie } from 'cookies-utils';
+import { Curso } from './models/Curso';
+import { Estudiante } from './models/Estudiante';
+import { LISTA_CURSOS } from './mock/cursos.mock';
 
 /**
  * Se puede comentar asi tambien bloques de comentarios
@@ -550,6 +553,45 @@ miTemporizador.empezar();
 // Eliminar la ejecucion de la funcion
 delete miTemporizador.terminar;
 
-// Extender de EventTarget
+
+
+
+// ** CLASES
+
+// Creamos un curso
+
+// const cursoTS = new Curso("Typescript", 15);
+// const cursoJS = new Curso("Javascript", 20);
+
+// const listaCursos: Curso[] = [];
+
+// listaCursos.push(cursoTS,cursoJS); // [Lista de cursos]
+
+// usamos el MOCK
+
+const listaCursos: Curso[] = LISTA_CURSOS;
+
+// Creamos un estudiante
+
+const kelvin: Estudiante = new Estudiante("Kelvin",listaCursos, "Guerrero Mite");
+
+console.log(`${kelvin.nombre} estudia:`);
+kelvin.cursos.forEach((curso: Curso) => {
+    console.log(`${curso.nombre} (${curso.horas} horas)`); // Typescript (15 horas)
+})
+
+const cursoAngular: Curso = new Curso("Angular",40);
+kelvin.cursos.push(cursoAngular); //Add nuevo curso al objeto kelvin
+
+// Conocer las horas estudiadas
+kelvin.horasEstudiadas; // number
+kelvin.ID_Estudiante = "x8981402v";
+kelvin.ID_Estudiante;
+
+
+// Saber la instancia de un objeto/variable
+// - TypeOf
+// - InstanceOf
+
 
 
