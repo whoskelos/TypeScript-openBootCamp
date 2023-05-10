@@ -5,6 +5,9 @@ import { deleteAllCookies, deleteCookie, getCookieValue, setCookie } from 'cooki
 import { Curso } from './models/Curso';
 import { Estudiante } from './models/Estudiante';
 import { LISTA_CURSOS } from './mock/cursos.mock';
+import { Empleado, Jefe } from './models/Persona';
+import { ITarea, Nivel } from './models/interfaces/ITarea';
+import { Programar } from './models/Programar';
 
 /**
  * Se puede comentar asi tambien bloques de comentarios
@@ -361,22 +364,22 @@ ejemploParamLista(lista);
 
 // ** ARROW Functions
 
-type Empleado = {
-    nombre: string
-    apellidos: string
-    edad: number
-}
+// type Empleado = {
+//     nombre: string
+//     apellidos: string
+//     edad: number
+// }
 
-let empleadoKelvin: Empleado = {
-    nombre: "Kelvin",
-    apellidos: "San Jose",
-    edad: 23
-}
+// let empleadoKelvin: Empleado = {
+//     nombre: "Kelvin",
+//     apellidos: "San Jose",
+//     edad: 23
+// }
 
 const mostrarEmpleado = (empleado: Empleado): string => `${empleado.nombre} tiene ${empleado.edad} anyos`;
 
 // Llamamos a la funcion
-mostrarEmpleado(empleadoKelvin);
+// mostrarEmpleado(empleadoKelvin);
 
 const datosEmpleado = (empleado: Empleado): string => {
     if (empleado.edad > 70) {
@@ -386,7 +389,7 @@ const datosEmpleado = (empleado: Empleado): string => {
     }
 }
 
-datosEmpleado(empleadoKelvin); // Empleado Kelvin esta en edad laboral
+//datosEmpleado(empleadoKelvin); // Empleado Kelvin esta en edad laboral
 
 
 const obtenerSalario = (empleado: Empleado, cobrar: () => string) => {
@@ -401,7 +404,7 @@ const cobrarEmpleado = (empleado: Empleado) => {
     console.log(`${empleado.nombre} cobra su salario`);
 }
 
-obtenerSalario(empleadoKelvin, () => 'Cobrar Kelvin');
+//obtenerSalario(empleadoKelvin, () => 'Cobrar Kelvin');
 
 // Async Functions
 
@@ -487,13 +490,13 @@ function mostrarError(error: string | number): void {
 
 // LocalStorage y SessionStorage
 
-// function guardarEnLocalStorage(): void {
-//     localstorage.set("nombre", "Kelvin");
-// }
+function guardarEnLocalStorage(): void {
+    localStorage.set("nombre", "Kelvin");
+}
 
-// function leerDesdeLocalStorage(): void {
-//     let nombre = localstorage.get("nombre", "Kelvin");
-// }
+function leerDesdeLocalStorage(): void {
+    let nombre = localStorage.get("nombre", "Kelvin");
+}
 
 
 // Cookies
@@ -594,4 +597,112 @@ kelvin.ID_Estudiante;
 // - InstanceOf
 
 
+let fechaNacimiento = new Date(1999,7,21);
 
+if (fechaNacimiento instanceof Date) {
+    console.log("Es una instancia de Date");
+}
+
+if (kelvin instanceof Estudiante) {
+    console.log("Kelvin es un estudiante");
+}
+
+
+//Herencia y Polimorfismo
+
+let empleado1 = new Empleado("Kelvin","Guerrero Mite",23,2000);
+let empleado2 = new Empleado("Pepe","Garcia",21,1000);
+let empleado3 = new Empleado("Juan","Gonzalez Mite",40,3000);
+
+
+//empleado1.saludar(); // Herencia de Persona
+
+let jefe = new Jefe("Pablo", "Garcia",50);
+
+jefe.saludar(); // Herencia de Persona
+
+jefe.empleados.push(empleado1,empleado2,empleado3);
+
+jefe.empleados.forEach((empleado:Empleado) => {
+    empleado.saludar(); // Especificado en Empleado (sobrecargado)
+})
+
+empleado1.saludar(); // Especificado en Empleado (sobrecargado)
+
+
+// ** Uso de interfaces
+
+let programar: ITarea = {
+    titulo: 'Programar en Typescript',
+    descripcion: 'Practicar con Katas para aprender con TS',
+    completada: false,
+    urgencia: Nivel.Urgente,
+    resumen: function (): string {
+        return `${this.titulo} - ${this.completada} - Nivel: ${this.urgencia}`;
+    }
+}
+
+console.log(programar.resumen());
+
+// Tarea de Programacion (implementa ITarea)
+
+let programarTS = new Programar("TypeScript", "Tarea de programacion en TS",false,Nivel.Bloqueante);
+console.log(programarTS.resumen());
+
+
+// Decoradores experimentales --> @
+// - Clases
+// - Metodos
+// - Propiedades
+
+
+function Override(label: string) {
+    return function(target: any, key: string) {
+        Object.defineProperty(target,key, {
+            configurable: false,
+            get: () => label
+        })
+    }
+}
+
+class PruebaDecorador {
+    @Override('Prueba') // llamar a la funcion Override
+    nombre: string = "Martin";
+}
+
+let prueba = new PruebaDecorador();
+console.log(prueba.nombre); // "Prueba" siempre va a ser devuelto a traves del get()
+
+
+// Otra funcion para usarla como decorador
+function soloLectura(target:any, key: string) {
+    Object.defineProperty(target,key, {
+        writable: false
+    })
+}
+
+class PruebaSoloLectura {
+
+    @soloLectura
+    nombre: string = "";
+}
+
+let pruebaLectura = new PruebaSoloLectura();
+pruebaLectura.nombre = "Martin";
+console.log(pruebaLectura.nombre); // Undefined, ya que no se le puede dar valor (es solo de lectura);
+
+
+// Decorador para parametros de un metodo
+function mostrarPosicion(target: any, propertyKey: string, parameterIndex: number) {
+    console.log("Posicion", parameterIndex);
+}
+
+
+class PruebaMetodoDecorador {
+    prueba(a: string, @mostrarPosicion b: boolean) {
+        console.log(b);
+    }
+}
+
+// Usamos el metodo con el parametro y su decorador
+new  PruebaMetodoDecorador().prueba('hola',false);
