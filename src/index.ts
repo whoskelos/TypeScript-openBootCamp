@@ -656,53 +656,70 @@ console.log(programarTS.resumen());
 // - Propiedades
 
 
-function Override(label: string) {
-    return function(target: any, key: string) {
-        Object.defineProperty(target,key, {
-            configurable: false,
-            get: () => label
-        })
-    }
-}
+// function Override(label: string) {
+//     return function(target: any, key: string) {
+//         Object.defineProperty(target,key, {
+//             configurable: false,
+//             get: () => label
+//         })
+//     }
+// }
 
-class PruebaDecorador {
-    @Override('Prueba') // llamar a la funcion Override
-    nombre: string = "Martin";
-}
+// class PruebaDecorador {
+//     @Override('Prueba') // llamar a la funcion Override
+//     nombre: string = "Martin";
+// }
 
-let prueba = new PruebaDecorador();
-console.log(prueba.nombre); // "Prueba" siempre va a ser devuelto a traves del get()
+// let prueba = new PruebaDecorador();
+// console.log(prueba.nombre); // "Prueba" siempre va a ser devuelto a traves del get()
 
 
 // Otra funcion para usarla como decorador
-function soloLectura(target:any, key: string) {
-    Object.defineProperty(target,key, {
-        writable: false
-    })
-}
+// function soloLectura(target:any, key: string) {
+//     Object.defineProperty(target,key, {
+//         writable: false
+//     })
+// }
 
-class PruebaSoloLectura {
+// class PruebaSoloLectura {
 
-    @soloLectura
-    nombre: string = "";
-}
+//     @soloLectura
+//     nombre: string = "";
+// }
 
-let pruebaLectura = new PruebaSoloLectura();
-pruebaLectura.nombre = "Martin";
-console.log(pruebaLectura.nombre); // Undefined, ya que no se le puede dar valor (es solo de lectura);
-
-
-// Decorador para parametros de un metodo
-function mostrarPosicion(target: any, propertyKey: string, parameterIndex: number) {
-    console.log("Posicion", parameterIndex);
-}
+// let pruebaLectura = new PruebaSoloLectura();
+// pruebaLectura.nombre = "Martin";
+// console.log(pruebaLectura.nombre); // Undefined, ya que no se le puede dar valor (es solo de lectura);
 
 
-class PruebaMetodoDecorador {
-    prueba(a: string, @mostrarPosicion b: boolean) {
-        console.log(b);
-    }
-}
+// // Decorador para parametros de un metodo
+// function mostrarPosicion(target: any, propertyKey: string, parameterIndex: number) {
+//     console.log("Posicion", parameterIndex);
+// }
+
+
+// class PruebaMetodoDecorador {
+//     prueba(a: string, @mostrarPosicion b: boolean) {
+//         console.log(b);
+//     }
+// }
 
 // Usamos el metodo con el parametro y su decorador
-new  PruebaMetodoDecorador().prueba('hola',false);
+// new  PruebaMetodoDecorador().prueba('hola',false);
+
+
+// ** PATRONES CREACIONALES
+
+// const miPrimerSingleton = Singleton.getInstance();
+// const miSegundoSingleton = Singleton.getInstance();
+
+// // Comprueba si ambos son inguales
+
+// if (miPrimerSingleton === miSegundoSingleton) {
+//     console.log('Singleton funciona correctamente, ambas variables contienen la misma instancia');
+//     miPrimerSingleton.mostrarPorConsola();
+//     miSegundoSingleton.mostrarPorConsola();
+// } else {
+//     console.log('Error, las variables contienen distintas instancias.');
+// }
+
